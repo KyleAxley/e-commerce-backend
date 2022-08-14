@@ -13,6 +13,6 @@ app.use(routes);
 
 // sync sequelize to turn the server on {force: true} = drop all databases/ off {force: false} = keep all databases. 
 //important**** remember to set force to true when updating/creating new databases and then reset back to force: false when old tables were dropped!
-sequelize.sync({ force: true }).then(() => {
+sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => console.log('Now listening'))
 });
