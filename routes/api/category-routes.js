@@ -6,7 +6,12 @@ const { Category, Product } = require('../../models');
 
 //api route to find all in categories
 router.get('/', (req, res) => {
-  Category.findAll()
+  Category.findAll({
+    include: {
+      model: Product,
+      attributes: ['id', 'product_name', 'price', 'stock'],
+    }
+  })
   .then(dbCategoryData => res.json(dbCategoryData))
   .catch(err => {
     res.status(500).json(err)
@@ -19,8 +24,15 @@ router.get('/:id', (req, res) => {
     where: {
       id: req.params.id
     },
-    //if no category is found by "id" input search then send error message
-  }).then(dbCategoryData => {
+    include: [
+      {
+        model: Product,
+        attributes: ['id', 'product_name', 'price', 'stock'], 
+      }
+    ],
+  })
+  //if no category is found by "id" input search then send error message
+  .then(dbCategoryData => {
     if(!dbCategoryData) {
       res.status(400).json({ message: 'No category found with that id!'});
       return;
