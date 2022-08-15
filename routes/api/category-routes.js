@@ -7,10 +7,7 @@ const { Category, Product } = require('../../models');
 //api route to find all in categories
 router.get('/', (req, res) => {
   Category.findAll({
-    include: {
-      model: Product,
-      attributes: ['id', 'product_name', 'price', 'stock'],
-    }
+    include: [Product]
   })
   .then(dbCategoryData => res.json(dbCategoryData))
   .catch(err => {
@@ -24,12 +21,7 @@ router.get('/:id', (req, res) => {
     where: {
       id: req.params.id
     },
-    include: [
-      {
-        model: Product,
-        attributes: ['id', 'product_name', 'price', 'stock'], 
-      }
-    ],
+    include: [Product]
   })
   //if no category is found by "id" input search then send error message
   .then(dbCategoryData => {
@@ -48,7 +40,7 @@ router.get('/:id', (req, res) => {
 //api route to create a new category
 router.post('/', (req, res) => {
   Category.create({
-
+    category_name: req.body.category_name
   })
   .then(dbCategoryData => res.json(dbCategoryData))
   .catch(err => {
@@ -61,7 +53,7 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
   Category.update(req.body, {
     where: {
-      id: req.body.id
+      id: req.params.id
     }
   })
   .then(dbCategoryData => {
